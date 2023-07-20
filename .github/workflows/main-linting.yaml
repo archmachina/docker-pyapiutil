@@ -1,7 +1,8 @@
 ---
 
-name: linting-latest
+name: main-linting
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -20,6 +21,6 @@ jobs:
       - name: linting
         uses: github/super-linter@v5
         env:
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,3 +1,5 @@
+---
+
 name: release
 on:
   push:
@@ -5,6 +7,23 @@ on:
       - "v*"
 
 jobs:
+  push:
+    name: "push"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: release
+        shell: bash
+        run: |
+          ./entrypoint build push
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+
   release:
     name: "release"
     runs-on: ubuntu-latest
@@ -16,9 +35,8 @@ jobs:
           submodules: true
 
       - name: release
-        shell: pwsh
+        shell: bash
         run: |
-          ./entrypoint.ps1 release
+          ./entrypoint release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
