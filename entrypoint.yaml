@@ -96,7 +96,7 @@ actions:
       - docker_build_version
       - docker_build
 
-  registry_release:
+  build_push:
     env:
       # Semver isn't required as we may build 'latest' from the main branch without a semver version
       SEMVER_REQUIRED: false
