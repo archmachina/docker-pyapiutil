@@ -14,12 +14,26 @@ env:
   REGISTRY_IMAGE: "docker.io/archmachina/pyapiutil"
 
 steps:
+  gen_dev_version:
+    type: command
+    interpreter: /bin/bash
+    command: echo "0.1.0-dev+$(git log -1 --format=%h)"
+    capture: DEFAULT_SEMVER
+    capture_strip: true
+
   semver:
     type: semver
     required: $SEMVER_REQUIRED
     sources:
       - GITHUB_REF
       - DEFAULT_SEMVER
+
+  docker_build_version:
+    type: command
+    interpreter: /bin/bash
+    command: echo "$(date -u --iso-8601=s) git:$(git log -1 --format=%h) $SEMVER_FULL"
+    capture: BUILD_VERSION
+    capture_strip: true
 
   # Perform a docker build of the image
   docker_build:
@@ -38,6 +52,8 @@ steps:
   docker_login:
     type: command
     interpreter: /bin/bash
+    env:
+      REGISTRY_TOKEN: $SECRET_REGISTRY_TOKEN
     command: docker login --password-stdin -u "${REGISTRY_USERNAME}" "${REGISTRY_HOST}" < <(echo "${REGISTRY_TOKEN}")
 
   docker_registry_push:
@@ -68,21 +84,8 @@ steps:
         docker push "${REGISTRY_IMAGE}:${TAG}"
       done
 
-  gen_dev_version:
-    type: command
-    interpreter: /bin/bash
-    command: echo "0.1.0-dev+$(git log -1 --format=%h)"
-    capture: DEFAULT_SEMVER
-    capture_strip: true
-
-  docker_build_version:
-    type: command
-    interpreter: /bin/bash
-    command: echo "$(date -u --iso-8601=s) git:$(git log -1 --format=%h) $SEMVER_FULL"
-    capture: BUILD_VERSION
-    capture_strip: true
-
 actions:
+  # Steps for a manually triggered build
   build:
     env:
       SEMVER_REQUIRED: false
@@ -93,9 +96,20 @@ actions:
       - docker_build_version
       - docker_build
 
-  build_push:
+  # Steps for a pull request to the main branch
+  pr_main:
     env:
-      # Semver isn't required as we may build 'latest' from the main branch without a semver version
+      SEMVER_REQUIRED: false
+    steps:
+      # gen_dev_version will generate a default semver version for this build
+      - gen_dev_version
+      - semver
+      - docker_build_version
+      - docker_build
+
+  # Steps to perform when building on main branch
+  branch_main:
+    env:
       SEMVER_REQUIRED: false
     steps:
       - semver
@@ -105,11 +119,17 @@ actions:
       - docker_login
       - docker_registry_push
 
-  github_release:
+  # Steps to perform when building from a git tag
+  version_tag:
     env:
       SEMVER_REQUIRED: true
     steps:
       - semver
+      - docker_build_version
+      - docker_build
+      - docker_build_sha
+      - docker_login
+      - docker_registry_push
       - name: github_release
         type: github_release
         owner: $GITHUB_OWNER

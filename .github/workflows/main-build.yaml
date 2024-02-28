@@ -21,8 +21,6 @@ jobs:
       - name: build
         shell: bash
         run: |
-          ./entrypoint build_push
+          ./entrypoint branch_main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
-          TAG_VERSIONS: "latest"

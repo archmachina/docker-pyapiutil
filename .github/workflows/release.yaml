@@ -7,8 +7,8 @@ on:
       - "v*"
 
 jobs:
-  build_push:
-    name: "build_push"
+  version_tag:
+    name: "version_tag"
     runs-on: ubuntu-latest
 
     steps:
@@ -20,23 +20,7 @@ jobs:
       - name: release
         shell: bash
         run: |
-          ./entrypoint build_push
+          ./entrypoint version_tag
         env:
-          REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
-
-  github_release:
-    name: "github_release"
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: release
-        shell: bash
-        run: |
-          ./entrypoint github_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SECRET_REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+          SECRET_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
