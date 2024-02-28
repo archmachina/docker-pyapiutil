@@ -111,6 +111,7 @@ actions:
   branch_main:
     env:
       SEMVER_REQUIRED: false
+      TAG_VERSIONS: "latest"
     steps:
       - semver
       - docker_build_version
