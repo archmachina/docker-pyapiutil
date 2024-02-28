@@ -23,4 +23,4 @@ jobs:
         run: |
           ./entrypoint branch_main
         env:
-          REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+          SECRET_REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
