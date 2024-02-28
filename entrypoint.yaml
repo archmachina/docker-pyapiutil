@@ -64,8 +64,8 @@ steps:
         [ "$TAG" == "" ] && continue
 
         # Tag and push the image defined earlier
-        docker tag "${DOCKER_IMAGE_SHA}" "${DOCKER_IMAGE}:${TAG}"
-        docker push "${DOCKER_IMAGE}:${TAG}"
+        docker tag "${DOCKER_IMAGE_SHA}" "${REGISTRY_IMAGE}:${TAG}"
+        docker push "${REGISTRY_IMAGE}:${TAG}"
       done
 
   gen_dev_version:
