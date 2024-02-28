@@ -7,8 +7,8 @@ on:
       - "v*"
 
 jobs:
-  push:
-    name: "push"
+  build_push:
+    name: "build_push"
     runs-on: ubuntu-latest
 
     steps:
@@ -20,12 +20,12 @@ jobs:
       - name: release
         shell: bash
         run: |
-          ./entrypoint build push
+          ./entrypoint build_push
         env:
-          DOCKER_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+          REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-  release:
-    name: "release"
+  github_release:
+    name: "github_release"
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +37,6 @@ jobs:
       - name: release
         shell: bash
         run: |
-          ./entrypoint release
+          ./entrypoint github_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
