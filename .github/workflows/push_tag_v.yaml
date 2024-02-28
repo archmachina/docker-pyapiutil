@@ -1,14 +1,14 @@
 ---
 
-name: release
+name: push_version_tag
 on:
   push:
     tags:
       - "v*"
 
 jobs:
-  version_tag:
-    name: "version_tag"
+  push_version_tag:
+    name: "push_version_tag"
     runs-on: ubuntu-latest
 
     steps:
@@ -17,10 +17,10 @@ jobs:
         with:
           submodules: true
 
-      - name: release
+      - name: push_version_tag
         shell: bash
         run: |
-          ./entrypoint version_tag
+          ./entrypoint push_version_tag
         env:
           SECRET_REGISTRY_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
           SECRET_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

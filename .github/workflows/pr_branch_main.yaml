@@ -1,9 +1,8 @@
 ---
 
-name: main-linting
+name: pr_branch_main
 on:
-  workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -21,6 +20,21 @@ jobs:
       - name: linting
         uses: github/super-linter@v5
         env:
-          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  pr_branch_main:
+    name: "pr_branch_main"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: pr_branch_main
+        shell: bash
+        run: |
+          ./entrypoint pr_branch_main

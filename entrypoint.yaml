@@ -97,7 +97,7 @@ actions:
       - docker_build
 
   # Steps for a pull request to the main branch
-  pr_main:
+  pr_branch_main:
     env:
       SEMVER_REQUIRED: false
     steps:
@@ -108,7 +108,7 @@ actions:
       - docker_build
 
   # Steps to perform when building on main branch
-  branch_main:
+  push_branch_main:
     env:
       SEMVER_REQUIRED: false
       TAG_VERSIONS: "latest"
@@ -121,7 +121,7 @@ actions:
       - docker_registry_push
 
   # Steps to perform when building from a git tag
-  version_tag:
+  push_tag_v:
     env:
       SEMVER_REQUIRED: true
     steps:
