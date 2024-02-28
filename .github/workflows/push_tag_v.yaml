@@ -8,7 +8,7 @@ on:
 
 jobs:
   push_tag_v:
-    name: "push_version_tag"
+    name: "push_tag_v"
     runs-on: ubuntu-latest
 
     steps:

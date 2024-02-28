@@ -9,7 +9,7 @@ on:
 
 jobs:
   push_branch_main:
-    name: "branch_main"
+    name: "push_branch_main"
     runs-on: ubuntu-latest
 
     steps:
