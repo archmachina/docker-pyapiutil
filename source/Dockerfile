@@ -1,4 +1,4 @@
-FROM docker.io/python:3.12.2-bullseye
+FROM docker.io/python:3.13.2-bullseye
 
 ARG DEBIAN_FRONTEND=noninteractive
 
